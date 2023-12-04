@@ -4,7 +4,7 @@ In order to run the application, you will have to install the dependencies
 
 With yarn
 
-`yarn add`
+`yarn`
 
 or with npm
 
@@ -18,4 +18,4 @@ With yarn
 
 or with npm
 
-`npm dev`
+`npm run dev`
