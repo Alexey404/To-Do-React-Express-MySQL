@@ -1,24 +1,27 @@
 const express = require('express')
 const mysql = require('mysql2/promise')
-const dotenv = require('dotenv')
 const cors = require('cors')
-
-dotenv.config({ path: './.env' })
 
 const app = express()
 
 const pool = mysql.createPool({
-  host: process.env.DATABASE_HOST,
-  user: process.env.DATABASE_USER,
-  password: process.env.DATABASE_PASSWORD,
-  database: process.env.DATABASE,
+  host: 'localhost',
+  user: 'root',
+  password: '',
+  database: 'mybd',
 })
 
 app.use(cors())
 
+type dataTodo = {
+  id: number
+  text: string
+  isСompleted: number
+}
+
 const getTodo = () => {
   return new Promise((resolve, reject) => {
-    pool.query('SELECT * FROM todo').then(data => {
+    pool.query('SELECT * FROM todo').then((data: dataTodo[]) => {
       resolve(data[0])
     })
   })
@@ -29,7 +32,7 @@ app.get('/getTodo', async (req, res) => {
 })
 
 app.post('/addTodo', async (req, res) => {
-  pool.query(`INSERT INTO todo (text) VALUES ('${req.query.text}')`).then(
+  pool.query(`INSERT INTO todo (text) VALUES ('${req.query.text}')`).then(() =>
     setTimeout(async () => {
       res.json(await getTodo())
     }, 10)
@@ -41,7 +44,7 @@ app.post('/editTodo', async (req, res) => {
     .query(
       `UPDATE todo SET text = '${req.query.text}', isСompleted = '${req.query.isСompleted}' WHERE id = ${req.query.id}`
     )
-    .then(
+    .then(() =>
       setTimeout(async () => {
         res.json(await getTodo())
       }, 10)
@@ -49,7 +52,7 @@ app.post('/editTodo', async (req, res) => {
 })
 
 app.delete('/deleteTodo', async (req, res) => {
-  pool.query(`DELETE FROM todo WHERE id = ${req.query.id}`).then(
+  pool.query(`DELETE FROM todo WHERE id = ${req.query.id}`).then(() =>
     setTimeout(async () => {
       res.json(await getTodo())
     }, 10)
