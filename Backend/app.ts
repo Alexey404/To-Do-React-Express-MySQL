@@ -13,15 +13,9 @@ const pool = mysql.createPool({
 
 app.use(cors())
 
-type dataTodo = {
-  id: number
-  text: string
-  isСompleted: number
-}
-
 const getTodo = () => {
   return new Promise((resolve, reject) => {
-    pool.query('SELECT * FROM todo').then((data: dataTodo[]) => {
+    pool.query('SELECT * FROM todo').then((data) => {
       resolve(data[0])
     })
   })
